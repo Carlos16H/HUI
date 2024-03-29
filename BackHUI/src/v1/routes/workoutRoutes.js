@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const workoutController = require('../../controller/workoutcontroller');
+const workoutController = require('../../controller/workoutController');
 
 router
     .get("/", workoutController.getAllWorkouts)
@@ -11,7 +11,7 @@ router
 
     .patch("/:workoutId", workoutController.updateOneWorkout)
 
-    .delete("/workoutId", workoutController.deleteOneWorkout);
+    .delete("/:workoutId", workoutController.deleteOneWorkout);
 
 module.exports = router;
 

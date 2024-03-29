@@ -6,24 +6,66 @@ const getAllWorkouts = (req, res) => {
 };
 
 const getOneWorkout = (req, res) =>{
-    const workout = workoutServices.getOneWorkout(req.params.workoutId);
-    res.send(`Get workout ${req.params.workoutId}`);
+    const{
+        params: { workoutId },
+    } = req;
+
+    if(!workoutId){
+        return;
+    }
+    const workout = workoutServices.getOneWorkout(workoutId);
+    res.send({status: "ok", data: workout });
 };
 
 const createNewWorkout = (req, res) => {
+    const { body } = req;
 
-    const createdWorkout = workoutServices.createNewWorkout();
-    res.status(201).send({status: "OK"});
+    if(
+        !body.name ||
+        !body.mode ||
+        !body.equipment ||
+        !body.exercises ||
+        !body.trainerTips
+    ){
+        return;
+    }
+
+    const newWorkout = {
+        name: body.name,
+        mode: body.mode,
+        equipment: body.equipment,
+        exercises: body.exercises,
+        trainerTips: body.trainerTips,
+    };
+    const createdWorkout = workoutServices.createNewWorkout(newWorkout);
+    res.status(201).send({status: "OK", data: createdWorkout});
 };
 
 const updateOneWorkout = (req, res) => {
-    const updateWorkout = workoutServices.updateOneWorkout(req.params.workoutId);
-    res.send(`Update workout ${req.params.workoutId}`);
+    const { 
+        body, 
+        params: { workoutId },
+    } = req; 
+
+    if(!workoutId){
+        return;
+    }
+
+    const updateOneWorkout = workoutServices.updateOneWorkout(workoutId, body);
+    res.send({ status: "ok", data: updateOneWorkout });
 };
 
 const deleteOneWorkout = (req, res) => {
-    workoutServices.deleteOneWorkout(req.params.workoutId);
-    res.send(`Delete workout ${req.params.workoutId}`);
+    const {
+        params: { workoutId },
+    } = req;
+
+    if (!workoutId) {
+        return;
+    }
+
+    workoutServices.deleteOneWorkout(workoutId);
+    res.status(204).send({ status: "ok" });
 };
 
 module.exports = {
@@ -32,4 +74,4 @@ module.exports = {
     createNewWorkout,
     updateOneWorkout,
     deleteOneWorkout
-};
+}; 
