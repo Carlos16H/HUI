@@ -1,60 +1,70 @@
-const DB = require('./db.json');
-const { saveToDatabase } = require('../database/utils');
+require('./connection');
+const workoutModel = require('../models/WorkoutModel');
 
-const getAllWorkouts = () => {
-    return DB.workouts;
+
+const getAllWorkouts = async () => {
+
+    const workouts = await workoutModel.find();
+    return workouts;
 };
-
-const getOneWorkout = (workoutId)=>{
-  const workout = DB.workouts.find((workout) => workout.id === workoutId);
+ const getOneWorkout = async (workoutId)=>{
+  const workout = await workoutModel.findOne({_id: workoutId});
   if(!workout){
     return;
   };
   return workout;
 };
-
-const createNewWorkout = (newWorkout) => {
-    const isAlreadyAdded =
-      DB.workouts.findIndex((workout) => workout.name === newWorkout.name) > -1;
-    if (isAlreadyAdded) {
-      return;
-    }
-    DB.workouts.push(newWorkout);
-    saveToDatabase(DB);
-    return newWorkout;
+const createNewWorkout = async (newWorkout) => {
+    const workout = new workoutModel({
+      name: newWorkout.name,
+      mode: newWorkout.mode,
+      equipment: newWorkout.equipment,
+      exercises: newWorkout.exercises,
+      createdAt: newWorkout.createdAt,
+      updatedAt: newWorkout.updatedAt,
+      trainerTips: newWorkout.trainerTips
+    });
+    await workout.save();
+    return workout;
 };
 
-const updateOneWorkout = (workoutId, changes) => {
-  const indexForUpdated = DB.workouts.findIndex(
-    (workout) => (workout.id = workoutId)
-  );
+const updateOneWorkout = async (workoutId, changes) => {
+  try {
+    const indexForUpdated = await workoutModel.findOne({_id: workoutId});
 
-  if (indexForUpdated === -1) {
-    return;
-  }
-
-  const updatedWorkout = {
-    ...DB.workouts[indexForUpdated],
-    ...changes,
-    updatedAt: new Date().toLocaleString("en-US", { timeZone: "UTC"}),
-  };
-
-  DB.workouts[indexForUpdated] = updatedWorkout;
-  saveToDatabase(DB);
-  return updatedWorkout;
+    if (!indexForUpdated) {
+      return;
+    }
+    let updatedAt = new Date().toLocaleString("en-US", { timeZone: "UTC"});
+    const updatedWorkout =  await workoutModel.findByIdAndUpdate({ _id: workoutId}, {
+      name: changes.name,
+      mode: changes.mode,
+      equipment: changes.equipment,
+      exercises: changes.exercises,
+      createdAt: changes.createdAt,
+      updatedAt: updatedAt,
+      trainerTips: changes.trainerTips
+    });
+    return updatedWorkout;
+  } catch (error) {
+    console.error("Error getting training:", error);
+        throw error;
+  } 
 }
 
-const deleteOneWorkout = (workoutId) => {
-  const indexForDeleted = DB.workouts.findIndex(
-    (workout) => workout.id === workoutId
-  );
-
-  if (indexForDeleted === -1) {
-    return;
+const deleteOneWorkout = async (workoutId) => {
+  try {
+    const indexForDelete = await workoutModel.findOne({_id: workoutId});
+    if (!indexForDelete) {
+      return;
+    }
+    const deleted = await workoutModel.findByIdAndDelete(workoutId);
+    console.log(deleted);
+  } catch (error) {
+    console.error("Error getting training:", error);
+        throw error;
   }
+} 
 
-  DB.workouts.splice(indexForDeleted, 1);
-  saveToDatabase(DB);
-}
 
 module.exports = { getAllWorkouts, createNewWorkout, getOneWorkout, updateOneWorkout, deleteOneWorkout};
