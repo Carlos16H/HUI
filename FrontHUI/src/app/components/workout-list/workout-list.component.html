@@ -1,0 +1,21 @@
+<div id="bg" class="container-sm" style="padding-left: 10rem; padding-right: 10rem">
+
+    <app-header></app-header>
+
+    <div class="position-relative" style="margin-top: 7%; margin-bottom: 7%;">
+        @for (workout of workoutsList; track $index){
+            <div class="card border-primary mb-3" style="max-width: 40rem; margin-top: 10px; margin-bottom: 10px;">
+                <div class="card-header">{{workout.name}}</div>
+                <div class="card-body text-primary">
+                  <h5 class="card-title">Mode: {{workout.mode}}</h5>
+                  <p class="card-text">Equipment: {{workout.equipment}}</p>
+                  <p class="card-text">Exercises: {{workout.exercises}}</p>
+                  <p class="card-text">TrainerTips: {{workout.trainerTips}}</p>
+                </div>
+                <div class="card-footer bg-transparent border-success">Created: {{workout.createdAt}}     Updated: {{workout.updatedAt}}</div>
+            </div>
+        }
+    </div>
+    
+
+</div>

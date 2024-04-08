@@ -10,6 +10,7 @@
   "author": "Carlos Heredia",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "mongoose": "^8.2.4",
     "uuid": "^9.0.1"
