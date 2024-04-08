@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GetWorkoutService } from '../../Services/get-workout.service';
 import { workoutInterface } from '../../interfaces/workout.interface';
 import { HeaderComponent } from '../header/header.component';
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-workout-list',
@@ -13,7 +13,7 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class WorkoutListComponent implements OnInit{
   workoutsList: workoutInterface[] = [];
-  constructor(private workoutServise: GetWorkoutService) {}
+  constructor(private workoutServise: GetWorkoutService, private router: Router) {}
   ngOnInit(): void {
       this.getWorkoutList();
   }
@@ -26,5 +26,23 @@ export class WorkoutListComponent implements OnInit{
         console.log(err);
       }
     })
+  }
+
+  deleteWorkout(id: String){
+    this.workoutServise.deleteWorkout(id).subscribe(res => {
+        console.log('Entrenamiento eliminado exitosamente:', res);
+      },
+      error => {
+        console.error('Error al eliminar el entrenamiento:', error);
+      }
+    )
+    this.reloadPage();
+  }
+
+  reloadPage() {
+    window.location.reload();
+  }
+  WorkoutEdit(workoutId: String) {
+    this.router.navigate(['/workout', workoutId]);
   }
 }

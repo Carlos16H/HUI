@@ -1,1 +1,28 @@
-<p>workout works!</p>
+<div id="bg" class="container-sm" style="padding-left: 10rem; padding-right: 10rem">
+    <app-header></app-header>
+    <form class="row g-3" (ngSubmit)="saveWorkout()">
+        <div class="col-md-6">
+          <label for="name" class="form-label">Name</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="{{selectedWorkout.name}}" [(ngModel)]="name">
+        </div>
+        <div class="col-md-6">
+          <label for="mode" class="form-label">Mode</label>
+          <input type="text" class="form-control" id="mode" name="mode" placeholder="{{selectedWorkout.mode}}" [(ngModel)]="mode">
+        </div>
+        <div class="col-12">
+          <label for="equipment" class="form-label">Equipment</label>
+          <input type="text" class="form-control" id="equipment" placeholder="{{selectedWorkout.equipment}}" name="equipment" [(ngModel)]="equipment">
+        </div>
+        <div class="col-12">
+          <label for="exercises" class="form-label">Exercises</label>
+          <input type="text" class="form-control" id="exercises" placeholder="{{selectedWorkout.exercises}}" name="exercises" [(ngModel)]="exercises">
+        </div>
+        <div class="col-12">
+            <label for="trainerTips" class="form-label">Trainer Tips</label>
+            <input type="text" class="form-control" id="trainerTips" placeholder="{{selectedWorkout.trainerTips}}" name="trainerTips" [(ngModel)]="trainerTips">
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary"k>Save</button>
+        </div>
+      </form>
+</div>
