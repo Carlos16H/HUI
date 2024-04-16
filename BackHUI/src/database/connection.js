@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
+require('dotenv').config({path:'./.env'});
 
-const uri = "mongodb://127.0.0.1:27017/gymejercises";
+const uri = `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_URL}:27017/hui-monguito-1?authSource=${process.env.MONGO_USERNAME}`;
+console.log(uri)
 
 mongoose
     .connect(uri, {
